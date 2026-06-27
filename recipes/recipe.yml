@@ -1,41 +1,81 @@
 name: quartz
-# description will be included in the image's metadata
-description: quartz silverblue image
+description: quartz silverblue image - minimal and bloatware-free
 
-# the base image to build on top of (FROM) and the version tag to use
 base-image: ghcr.io/ublue-os/silverblue-main
-image-version: 42 # latest is also supported if you want new updates ASAP
+image-version: 44
 
-# module configuration, executed in order
-# you can include multiple instances of the same module
 modules:
   - type: files
     files:
       - source: system
-        destination: / # copies files/system/* (* means everything inside it) into your image's root folder /
+        destination: /
 
   - type: dnf
-    repos:
-      copr:
-        - atim/starship
     install:
       packages:
-
+        - librewolf
+    
     remove:
       packages:
-        # example: removing firefox (in favor of the flatpak)
-        # "firefox" is the main package, "firefox-langpacks" is a dependency
-        - firefox
         
-
+        - firefox
+        - firefox-langpacks
+        
+       
+        - gnome-maps
+        - gnome-weather
+        - gnome-music
+        - gnome-photos
+        - gnome-tour
+        - gnome-contacts
+        - gnome-calendar
+        - gnome-online-accounts  #
+        
+       
+        - evolution
+        - evolution-data-server
+        - evolution-devel
+        - geary  # cliente de email
+        - totem  # reproductor de video 
+        - rhythmbox  # reproductor de música
+        - baobab  # analizador de disco
+        - gnome-calculator
+        - simple-scan  # escáner
+        - gnome-logs  # visor de logs 
+        
+      
+        - yelp  # help system
+        - tracker-miners  # indexador de archivos (consume recursos)
+        - tracker  # indexación
+        #- adwaita-icon-theme  # si usas otro theme
+        
+        
+         - at-spi2-core
+         - orca
+         - speech-dispatcher
+        
+        
+        - google-noto-fonts-common  # si no las usas
+        - google-noto-serif-fonts
+        - google-noto-mono-fonts
+        
+        
+        - gnome-user-docs
+        - fedora-release-notes
+        
+        
+         - fprintd  # sensor de huella dactilar
+         - cups-pk-helper  # impresoras
+         - cups  # servidor de impresión
+        
+        
   - type: default-flatpaks
     configurations:
-      - notify: true # Send notification after install/uninstall is finished (true/false)
+      - notify: true
         scope: system
-        # If no repo information is specified, Flathub will be used by default
-        install: # system flatpaks we want all users to have and not remove
-          - org.mozilla.firefox
+        install:
+          - org.mozilla.firefox  
           - org.gnome.Loupe
-      - scope: user # Also add Flathub user repo, but no user packages
+      - scope: user
 
-  - type: signing # this sets up the proper policy & signing files for signed images to work fully
+  - type: signing
