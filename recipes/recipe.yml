@@ -12,69 +12,50 @@ modules:
 
   - type: dnf
     install:
-      packages:
-        - librewolf
-    
+      - librewolf
+
     remove:
-      packages:
-        
-        - firefox
-        - firefox-langpacks
-        
-       
-        - gnome-maps
-        - gnome-weather
-        - gnome-music
-        - gnome-photos
-        - gnome-tour
-        - gnome-contacts
-        - gnome-calendar
-        - gnome-online-accounts  #
-        
-       
-        - evolution
-        - evolution-data-server
-        - evolution-devel
-        - geary  # cliente de email
-        - totem  # reproductor de video 
-        - rhythmbox  # reproductor de música
-        - baobab  # analizador de disco
-        - gnome-calculator
-        - simple-scan  # escáner
-        - gnome-logs  # visor de logs 
-        
-      
-        - yelp  # help system
-        - tracker-miners  # indexador de archivos (consume recursos)
-        - tracker  # indexación
-        #- adwaita-icon-theme  # si usas otro theme
-        
-        
-         - at-spi2-core
-         - orca
-         - speech-dispatcher
-        
-        
-        - google-noto-fonts-common  # si no las usas
-        - google-noto-serif-fonts
-        - google-noto-mono-fonts
-        
-        
-        - gnome-user-docs
-        - fedora-release-notes
-        
-        
-         - fprintd  # sensor de huella dactilar
-         - cups-pk-helper  # impresoras
-         - cups  # servidor de impresión
-        
-        
+      - firefox
+      - firefox-langpacks
+      - gnome-maps
+      - gnome-weather
+      - gnome-music
+      - gnome-photos
+      - gnome-tour
+      - gnome-contacts
+      - gnome-calendar
+      - gnome-online-accounts
+      - evolution
+      - evolution-data-server
+      - evolution-devel
+      - geary
+      - totem
+      - rhythmbox
+      - baobab
+      - gnome-calculator
+      - simple-scan
+      - gnome-logs
+      - yelp
+      - tracker-miners
+      - tracker
+      - at-spi2-core
+      - orca
+      - speech-dispatcher
+      - google-noto-fonts-common
+      - google-noto-serif-fonts
+      - google-noto-mono-fonts
+      - gnome-user-docs
+      - fedora-release-notes
+      - fprintd
+      - cups-pk-helper
+      - cups
+
   - type: default-flatpaks
     configurations:
       - notify: true
         scope: system
         install:
-          - org.mozilla.firefox  
+          - org.mozilla.firefox
           - org.gnome.Loupe
       - scope: user
 
