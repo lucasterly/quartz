@@ -1,9 +1,6 @@
----
-# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
-# image will be published to ghcr.io/<user>/<name>
 name: quartz
 # description will be included in the image's metadata
-description: This is my personal OS image.
+description: quartz silverblue image
 
 # the base image to build on top of (FROM) and the version tag to use
 base-image: ghcr.io/ublue-os/silverblue-main
@@ -23,8 +20,7 @@ modules:
         - atim/starship
     install:
       packages:
-        - micro
-        - starship
+
     remove:
       packages:
         # example: removing firefox (in favor of the flatpak)
