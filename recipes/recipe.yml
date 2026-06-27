@@ -1,62 +1,125 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
 name: quartz
-description: quartz silverblue image - minimal and bloatware-free
+version: 1
+description: quartz silverblue image - minimal, bloatware-free, RAM-optimized with Zen kernel
 
 base-image: ghcr.io/ublue-os/silverblue-main
 image-version: 44
 
 modules:
+  # Copy system files
   - type: files
     files:
       - source: system
         destination: /
 
+  # Install Zen kernel and remove unnecessary packages
   - type: dnf
     install:
-      - librewolf
-
+      packages:
+        - kernel-zen
     remove:
-      - firefox
-      - firefox-langpacks
-      - gnome-maps
-      - gnome-weather
-      - gnome-music
-      - gnome-photos
-      - gnome-tour
-      - gnome-contacts
-      - gnome-calendar
-      - gnome-online-accounts
-      - evolution
-      - evolution-data-server
-      - evolution-devel
-      - geary
-      - totem
-      - rhythmbox
-      - baobab
-      - gnome-calculator
-      - simple-scan
-      - gnome-logs
-      - yelp
-      - tracker-miners
-      - tracker
-      - at-spi2-core
-      - orca
-      - speech-dispatcher
-      - google-noto-fonts-common
-      - google-noto-serif-fonts
-      - google-noto-mono-fonts
-      - gnome-user-docs
-      - fedora-release-notes
-      - fprintd
-      - cups-pk-helper
-      - cups
+      packages:
+        # Default kernel (replace with Zen)
+        - kernel
+        - kernel-core
+        - kernel-modules
+        - kernel-modules-core
 
+        # Browsers
+        - firefox
+        - firefox-langpacks
+
+        # GNOME bloat
+        - gnome-maps
+        - gnome-weather
+        - gnome-music
+        - gnome-photos
+        - gnome-tour
+        - gnome-contacts
+        - gnome-calendar
+        - gnome-online-accounts
+        - gnome-user-docs
+        - gnome-logs
+        - gnome-calculator
+        - baobab
+        - simple-scan
+
+        # Email clients
+        - evolution
+        - evolution-data-server
+        - evolution-devel
+        - geary
+
+        # Media players
+        - totem
+        - rhythmbox
+
+        # Indexing (high RAM usage)
+        - tracker
+        - tracker-miners
+
+        # Accessibility
+        - at-spi2-core
+        - orca
+        - speech-dispatcher
+
+        # Fonts
+        - google-noto-fonts-common
+        - google-noto-serif-fonts
+        - google-noto-mono-fonts
+
+        # Printing
+        - cups
+        - cups-pk-helper
+        - fprintd
+
+        # Network services
+        - ModemManager
+        - NetworkManager-wifi
+        - bluetooth
+        - avahi
+        - dnf-automatic
+
+        # Hardware services
+        - udiskie
+        - gnome-disk-utility
+
+        # Fedora docs
+        - fedora-release-notes
+
+        # Help system
+        - yelp
+
+  # Install essential apps as Flatpaks
   - type: default-flatpaks
-    configurations:
-      - notify: true
-        scope: system
-        install:
-          - org.mozilla.firefox
-          - org.gnome.Loupe
-      - scope: user
+    notify: true
+    system:
+      install:
+        - org.mozilla.firefox
+        - org.gnome.Loupe
+        - io.gitlab.librewolf-community
+    user:
+      scope: user
 
+  # Enable zram for RAM compression via kernel args
+  - type: kargs
+    kargs:
+      - zram.enabled=1
+      - zram.compression_algorithm=lz4
+      - zram.size=50%
+
+  # Disable unnecessary services and clean caches
+  - type: script
+    script: |
+      # Disable services
+      for service in ModemManager bluetooth cups avahi-daemon tracker-store tracker-miner-fs tracker-miner-rss tracker-extract evolution-calendar-factory evolution-addressbook-factory; do
+        systemctl --root=/ disable "$service" 2>/dev/null || true
+      done
+      
+      # Clean up caches
+      rm -rf /var/cache/dnf /var/cache/PackageKit /var/cache/flatpak
+
+  # Sign the image
   - type: signing
