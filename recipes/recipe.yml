@@ -50,8 +50,7 @@ modules:
 
   - type: akmods
     install:
-      packages:
-        - kernel-zen
+      - kernel-zen
 
   - type: default-flatpaks
     configurations:
