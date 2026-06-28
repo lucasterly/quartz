@@ -48,6 +48,11 @@ modules:
         - cups-pk-helper
         - cups
 
+  - type: akmods
+    install:
+      packages:
+        - kernel-zen
+
   - type: default-flatpaks
     configurations:
       - notify: true
