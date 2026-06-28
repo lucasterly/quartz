@@ -59,4 +59,22 @@ modules:
           - org.gnome.Loupe
       - scope: user
 
+  - type: script@v1
+    snippets:
+      - |
+        # Set zram
+        echo "zram.size=50%" >> /etc/default/grub
+
+  - type: script@v1
+    snippets:
+      - |
+        # Disable unnecessary services and clean caches
+        # Disable services
+        for service in ModemManager bluetooth cups avahi-daemon tracker-store tracker-miner-fs tracker-miner-rss tracker-extract evolution-calendar-factory evolution-addressbook-factory; do
+          systemctl --root=/ disable "$service" 2>/dev/null || true
+        done
+        
+        # Clean up caches
+        rm -rf /var/cache/dnf /var/cache/PackageKit /var/cache/flatpak
+
   - type: signing
