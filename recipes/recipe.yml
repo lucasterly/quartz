@@ -11,10 +11,6 @@ modules:
         destination: /
 
   - type: dnf
-    install:
-      packages:
-        - librewolf
-
     remove:
       packages:
         - firefox
