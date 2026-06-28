@@ -59,19 +59,11 @@ modules:
 
   - type: script@v1
     snippets:
-      - |
-        # Set zram
-        echo "zram.size=50%" >> /etc/default/grub
+      - echo "zram.size=50%" >> /etc/default/grub
 
   - type: script@v1
     snippets:
-      - |
-        # Disable unnecessary services
-        for service in ModemManager bluetooth avahi-daemon; do
-          systemctl --root=/ disable "$service" 2>/dev/null || true
-        done
-        
-        # Clean up caches
-        rm -rf /var/cache/dnf /var/cache/PackageKit /var/cache/flatpak
+      - for service in ModemManager bluetooth avahi-daemon; do systemctl --root=/ disable "$service" 2>/dev/null || true; done
+      - rm -rf /var/cache/dnf /var/cache/PackageKit /var/cache/flatpak
 
   - type: signing
