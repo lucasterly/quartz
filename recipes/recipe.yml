@@ -11,44 +11,42 @@ modules:
         destination: /
 
   - type: dnf
-    install:
-      - librewolf
-
     remove:
-      - firefox
-      - firefox-langpacks
-      - gnome-maps
-      - gnome-weather
-      - gnome-music
-      - gnome-photos
-      - gnome-tour
-      - gnome-contacts
-      - gnome-calendar
-      - gnome-online-accounts
-      - evolution
-      - evolution-data-server
-      - evolution-devel
-      - geary
-      - totem
-      - rhythmbox
-      - baobab
-      - gnome-calculator
-      - simple-scan
-      - gnome-logs
-      - yelp
-      - tracker-miners
-      - tracker
-      - at-spi2-core
-      - orca
-      - speech-dispatcher
-      - google-noto-fonts-common
-      - google-noto-serif-fonts
-      - google-noto-mono-fonts
-      - gnome-user-docs
-      - fedora-release-notes
-      - fprintd
-      - cups-pk-helper
-      - cups
+      packages:
+        - firefox
+        - firefox-langpacks
+        - gnome-maps
+        - gnome-weather
+        - gnome-music
+        - gnome-photos
+        - gnome-tour
+        - gnome-contacts
+        - gnome-calendar
+        - gnome-online-accounts
+        - evolution
+        - evolution-data-server
+        - evolution-devel
+        - geary
+        - totem
+        - rhythmbox
+        - baobab
+        - gnome-calculator
+        - simple-scan
+        - gnome-logs
+        - yelp
+        - tracker-miners
+        - tracker
+        - at-spi2-core
+        - orca
+        - speech-dispatcher
+        - google-noto-fonts-common
+        - google-noto-serif-fonts
+        - google-noto-mono-fonts
+        - gnome-user-docs
+        - fedora-release-notes
+        - fprintd
+        - cups-pk-helper
+        - cups
 
   - type: default-flatpaks
     configurations:
@@ -58,5 +56,14 @@ modules:
           - org.mozilla.firefox
           - org.gnome.Loupe
       - scope: user
+
+  - type: script@v1
+    snippets:
+      - echo "zram.size=50%" >> /etc/default/grub
+
+  - type: script@v1
+    snippets:
+      - for service in ModemManager bluetooth avahi-daemon; do systemctl --root=/ disable "$service" 2>/dev/null || true; done
+      - rm -rf /var/cache/dnf /var/cache/PackageKit /var/cache/flatpak
 
   - type: signing
